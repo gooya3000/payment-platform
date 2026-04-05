@@ -101,6 +101,31 @@ class PaymentServiceTest {
     }
 
     @Test
+    void cancel_payment_changes_status_to_canceled_when_total_canceled_amount_matches_approved_amount() {
+        paymentService.approvePayment(
+                merchantId(),
+                orderId(),
+                paymentId(),
+                approvedAmount()
+        );
+
+        paymentService.cancelPayment(
+                merchantId(),
+                paymentId(),
+                cancelAmount()
+        );
+
+        Payment canceledPayment = paymentService.cancelPayment(
+                merchantId(),
+                paymentId(),
+                approvedAmount() - cancelAmount()
+        );
+
+        assertThat(canceledPayment.getCanceledAmount()).isEqualTo(approvedAmount());
+        assertThat(canceledPayment.getStatus()).isEqualTo(PaymentStatus.CANCELED);
+    }
+
+    @Test
     void cancel_payment_throws_exception_when_cancel_amount_exceeds_approved_amount() {
         paymentService.approvePayment(
                 merchantId(),
