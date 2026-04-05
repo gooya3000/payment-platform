@@ -164,6 +164,7 @@ erDiagram
 
 ### 공통 정책
 - `paymentId`는 가맹점 범위 내에서만 유일하며, 승인 멱등성은 `merchantId + paymentId` 기준으로 보장
+- `idempotency_key`는 최초 생성된 결제 리소스를 참조하며, 재시도 시 해당 결제의 현재 상태를 반환
 - 취소는 승인된 결제만 가능
 - 부분 취소 가능, 누적 취소 금액은 승인 금액 이하여야 함
 - 외부 조회 식별자는 `merchantId + paymentId` 조합을 사용하고, 내부 연관 관계는 `payment_no`로 연결
